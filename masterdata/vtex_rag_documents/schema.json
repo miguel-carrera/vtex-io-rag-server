@@ -1,0 +1,58 @@
+{
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Document title",
+      "maxLength": 200
+    },
+    "content": {
+      "type": "string",
+      "description": "Document content/body text",
+      "maxLength": 50000
+    },
+    "category": {
+      "type": "string",
+      "description": "Document category (e.g., Product, Business, Technical, FAQ)",
+      "maxLength": 100
+    },
+    "tags": {
+      "type": "array",
+      "description": "Array of tags for categorization and search",
+      "items": {
+        "type": "string",
+        "maxLength": 50
+      },
+      "maxItems": 20
+    },
+    "author": {
+      "type": "string",
+      "description": "Document author or creator",
+      "maxLength": 100
+    },
+    "enabled": {
+      "type": "boolean",
+      "description": "Whether this document is active and searchable",
+      "default": true
+    },
+    "summary": {
+      "type": "string",
+      "description": "Brief summary of the document content",
+      "maxLength": 500
+    }
+  },
+  "required": ["title", "content", "category", "enabled"],
+  "v-cache": false,
+  "v-default-fields": [
+    "title",
+    "content",
+    "category",
+    "tags",
+    "author",
+    "createdDate",
+    "updatedDate",
+    "enabled",
+    "summary"
+  ],
+  "v-indexed": ["title", "category", "tags", "author", "enabled", "createdDate"],
+  "v-immediate-indexing": true
+}

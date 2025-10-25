@@ -1,0 +1,100 @@
+{
+  "properties": {
+    "instance": {
+      "type": "string",
+      "description": "VTEX instance identifier (e.g., myaccount, myaccountvtexio). Empty for default configuration.",
+      "maxLength": 100,
+      "pattern": "^$|^[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]$"
+    },
+    "enabled": {
+      "type": "boolean",
+      "description": "Whether this RAG server configuration is active",
+      "default": true
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of this RAG server configuration",
+      "maxLength": 500
+    },
+    "searchSettings": {
+      "type": "object",
+      "description": "Search configuration settings",
+      "properties": {
+        "defaultLimit": {
+          "type": "number",
+          "description": "Default number of results to return (1-100)",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 20
+        },
+        "maxLimit": {
+          "type": "number",
+          "description": "Maximum number of results allowed (1-100)",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 100
+        },
+        "enableTextSearch": {
+          "type": "boolean",
+          "description": "Enable text search in title and content",
+          "default": true
+        },
+        "enableCategoryFilter": {
+          "type": "boolean",
+          "description": "Enable category filtering",
+          "default": true
+        },
+        "enableTagFilter": {
+          "type": "boolean",
+          "description": "Enable tag filtering",
+          "default": true
+        },
+        "enableAuthorFilter": {
+          "type": "boolean",
+          "description": "Enable author filtering",
+          "default": true
+        }
+      },
+      "default": {
+        "defaultLimit": 20,
+        "maxLimit": 100,
+        "enableTextSearch": true,
+        "enableCategoryFilter": true,
+        "enableTagFilter": true,
+        "enableAuthorFilter": true
+      }
+    },
+    "allowedCategories": {
+      "type": "array",
+      "description": "List of allowed categories (empty means all categories are allowed)",
+      "items": {
+        "type": "string",
+        "maxLength": 100
+      },
+      "uniqueItems": true,
+      "default": []
+    },
+    "allowedTags": {
+      "type": "array",
+      "description": "List of allowed tags (empty means all tags are allowed)",
+      "items": {
+        "type": "string",
+        "maxLength": 50
+      },
+      "uniqueItems": true,
+      "default": []
+    }
+  },
+  "required": ["instance", "enabled"],
+  "v-cache": false,
+  "v-default-fields": [
+    "instance",
+    "enabled",
+    "description",
+    "searchSettings",
+    "allowedCategories",
+    "allowedTags"
+  ],
+  "v-indexed": ["instance", "enabled"],
+  "v-immediate-indexing": true
+}
