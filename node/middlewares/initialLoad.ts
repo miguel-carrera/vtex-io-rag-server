@@ -42,7 +42,7 @@ export async function initialLoad(ctx: Context, next: () => Promise<any>) {
         ragConfig = configResponse[0] as RAGConfig
       }
     } catch (error) {
-      await logToMasterData(ctx, 'initialLoad', instanceValue, 'error', error)
+      logToMasterData(ctx, 'initialLoad', instanceValue, 'error', error)
     }
   }
 

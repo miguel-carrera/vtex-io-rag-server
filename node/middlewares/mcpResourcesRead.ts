@@ -1,6 +1,11 @@
 import { json } from 'co-body'
 
-import type { MCPRequest, MCPResponse, MCPResourcesReadRequest, MCPResourcesReadResponse } from '../types/mcp-protocol'
+import type {
+  MCPRequest,
+  MCPResponse,
+  MCPResourcesReadRequest,
+  MCPResourcesReadResponse,
+} from '../types/mcp-protocol'
 import { MasterDataService } from '../services/masterDataService'
 import { logToMasterData } from '../utils/logging'
 import { getValidMethodsForEndpoint } from '../utils/mcpUtils'
@@ -96,12 +101,16 @@ export async function mcpResourcesRead(
             {
               uri,
               mimeType: 'application/json',
-              text: JSON.stringify({
-                category,
-                documents: searchResult.documents,
-                total: searchResult.total,
-                hasMore: searchResult.hasMore,
-              }, null, 2),
+              text: JSON.stringify(
+                {
+                  category,
+                  documents: searchResult.documents,
+                  total: searchResult.total,
+                  hasMore: searchResult.hasMore,
+                },
+                null,
+                2
+              ),
             },
           ],
         }
@@ -109,7 +118,7 @@ export async function mcpResourcesRead(
         // rag://documents/tag/{tag}
         const tag = decodeURIComponent(uriParts[3])
         const searchResult = await masterDataService.searchDocuments({
-          tags: [tag],
+          documentTags: [tag],
           limit: 50,
         })
 
@@ -118,12 +127,16 @@ export async function mcpResourcesRead(
             {
               uri,
               mimeType: 'application/json',
-              text: JSON.stringify({
-                tag,
-                documents: searchResult.documents,
-                total: searchResult.total,
-                hasMore: searchResult.hasMore,
-              }, null, 2),
+              text: JSON.stringify(
+                {
+                  tag,
+                  documents: searchResult.documents,
+                  total: searchResult.total,
+                  hasMore: searchResult.hasMore,
+                },
+                null,
+                2
+              ),
             },
           ],
         }
@@ -136,11 +149,15 @@ export async function mcpResourcesRead(
             {
               uri,
               mimeType: 'application/json',
-              text: JSON.stringify({
-                documents: searchResult.documents,
-                total: searchResult.total,
-                hasMore: searchResult.hasMore,
-              }, null, 2),
+              text: JSON.stringify(
+                {
+                  documents: searchResult.documents,
+                  total: searchResult.total,
+                  hasMore: searchResult.hasMore,
+                },
+                null,
+                2
+              ),
             },
           ],
         }
@@ -164,10 +181,14 @@ export async function mcpResourcesRead(
           {
             uri,
             mimeType: 'application/json',
-            text: JSON.stringify({
-              categories,
-              total: categories.length,
-            }, null, 2),
+            text: JSON.stringify(
+              {
+                categories,
+                total: categories.length,
+              },
+              null,
+              2
+            ),
           },
         ],
       }
@@ -179,10 +200,14 @@ export async function mcpResourcesRead(
           {
             uri,
             mimeType: 'application/json',
-            text: JSON.stringify({
-              tags,
-              total: tags.length,
-            }, null, 2),
+            text: JSON.stringify(
+              {
+                tags,
+                total: tags.length,
+              },
+              null,
+              2
+            ),
           },
         ],
       }

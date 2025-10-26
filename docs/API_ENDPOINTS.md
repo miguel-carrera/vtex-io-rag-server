@@ -136,7 +136,7 @@ Returns available tools for document search.
               "type": "string",
               "description": "Filter documents by category (e.g., Product, Business, Technical, FAQ)"
             },
-            "tags": {
+            "documentTags": {
               "type": "array",
               "items": {
                 "type": "string"
@@ -181,7 +181,7 @@ Executes a tool (currently only `search_documents`).
     "arguments": {
       "query": "product pricing",
       "category": "Business",
-      "tags": ["pricing", "strategy"],
+      "documentTags": ["pricing", "strategy"],
       "limit": 10
     }
   }

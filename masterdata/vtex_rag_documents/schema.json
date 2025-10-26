@@ -15,7 +15,7 @@
       "description": "Document category (e.g., Product, Business, Technical, FAQ)",
       "maxLength": 100
     },
-    "tags": {
+    "documentTags": {
       "type": "array",
       "description": "Array of tags for categorization and search",
       "items": {
@@ -46,13 +46,11 @@
     "title",
     "content",
     "category",
-    "tags",
+    "documentTags",
     "author",
-    "createdDate",
-    "updatedDate",
     "enabled",
     "summary"
   ],
-  "v-indexed": ["title", "category", "tags", "author", "enabled", "createdDate"],
+  "v-indexed": ["title", "category", "documentTags", "author", "enabled"],
   "v-immediate-indexing": true
 }

@@ -9,9 +9,12 @@ export function getValidMethodsForEndpoint(endpoint: string): MCPMethod[] {
     'tools/call': ['tools/call', 'mcp/tools/call'],
     'resources/list': ['resources/list', 'mcp/resources/list'],
     'resources/read': ['resources/read', 'mcp/resources/read'],
-    'initialize': ['initialize', 'mcp/initialize'],
-    'handshake': ['handshake', 'mcp/handshake'],
-    'notifications/initialized': ['notifications/initialized', 'mcp/notifications/initialized'],
+    initialize: ['initialize', 'mcp/initialize'],
+    handshake: ['handshake', 'mcp/handshake'],
+    'notifications/initialized': [
+      'notifications/initialized',
+      'mcp/notifications/initialized',
+    ],
   }
 
   return methodMap[endpoint] || []
@@ -30,7 +33,7 @@ export function sanitizeToolName(name: string): string {
 export function buildSearchQuery(params: {
   query?: string
   category?: string
-  tags?: string[]
+  documentTags?: string[]
   author?: string
 }): string {
   const conditions: string[] = ['enabled=true']
@@ -38,15 +41,19 @@ export function buildSearchQuery(params: {
   if (params.query) {
     // Simple text search in title and content
     const searchTerm = params.query.replace(/"/g, '\\"')
-    conditions.push(`(title contains "${searchTerm}" OR content contains "${searchTerm}")`)
+    conditions.push(
+      `(title contains "${searchTerm}" OR content contains "${searchTerm}")`
+    )
   }
 
   if (params.category) {
     conditions.push(`category="${params.category}"`)
   }
 
-  if (params.tags && params.tags.length > 0) {
-    const tagConditions = params.tags.map(tag => `tags contains "${tag}"`)
+  if (params.documentTags && params.documentTags.length > 0) {
+    const tagConditions = params.documentTags.map(
+      (tag) => `documentTags contains "${tag}"`
+    )
     conditions.push(`(${tagConditions.join(' OR ')})`)
   }
 
@@ -66,7 +73,7 @@ export function formatDocumentForMCP(doc: any) {
     title: doc.title,
     content: doc.content,
     category: doc.category,
-    tags: doc.tags || [],
+    documentTags: doc.documentTags || [],
     author: doc.author,
     summary: doc.summary,
   }

@@ -1,36 +1,53 @@
-import { logToMasterData } from '../utils/logging'
+import { AuthenticationError } from '@vtex/api'
 
-// Basic authentication middleware
-export async function auth(ctx: Context, next: () => Promise<any>) {
-  try {
-    // For now, we'll allow all requests
-    // In a production environment, you might want to add proper authentication
-    // based on VTEX credentials, API keys, or other mechanisms
-    
-    const { req } = ctx
-    const userAgent = req.headers['user-agent'] || 'unknown'
-    
-    // Log the request for monitoring
-    await logToMasterData(ctx, 'auth', 'middleware', 'info', {
-      data: {
-        userAgent,
-        url: req.url,
-        method: req.method,
-      },
-      message: 'Request authenticated',
-    })
+export async function auth(ctx: Context, next: () => Promise<void>) {
+  const {
+    header,
+    clients: { vtexId, sphinx },
+    state,
+  } = ctx
 
-    return next()
-  } catch (error) {
-    await logToMasterData(ctx, 'auth', 'middleware', 'error', {
-      error,
-      message: 'Authentication failed',
-    })
+  const appkey = header['x-vtex-api-appkey'] as string | undefined
+  const apptoken = header['x-vtex-api-apptoken'] as string | undefined
+  const authCookie = header.vtexidclientautcookie as string | undefined
 
-    ctx.status = 401
-    ctx.body = {
-      error: 'Unauthorized',
-      message: 'Authentication failed',
+  if (authCookie) {
+    const authenticatedUser = await vtexId.getAuthenticatedUser(authCookie)
+
+    // When the auth cookie is invalid, the API returns null
+    if (authenticatedUser) {
+      const isAdmin = await sphinx.isAdmin(authenticatedUser.user)
+
+      const { user, userId } = authenticatedUser
+
+      state.userProfile = {
+        userId,
+        email: user,
+        role: isAdmin ? 'admin' : 'store-user',
+      }
+
+      if (isAdmin) {
+        ctx.vtex.adminUserAuthToken = authCookie
+      } else {
+        ctx.vtex.storeUserAuthToken = authCookie
+      }
     }
   }
+
+  if (appkey && apptoken) {
+    // If appkey and apptoken are not valid, the method throws a 401 error
+    const { token } = await vtexId.login({ appkey, apptoken })
+
+    state.appkey = appkey
+    ctx.vtex.adminUserAuthToken = token
+  }
+
+  const { userProfile, appkey: appKeyState } = state
+
+  // Either userProfile or appKeyState must be on state to continue
+  if (!userProfile && !appKeyState) {
+    throw new AuthenticationError('Request failed with status code 401')
+  }
+
+  await next()
 }

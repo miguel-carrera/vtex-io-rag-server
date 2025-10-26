@@ -83,7 +83,8 @@ export async function mcpToolsCall(ctx: Context, next: () => Promise<void>) {
     // Handle different tool calls
     switch (params.name) {
       case 'search_documents': {
-        const { query, category, tags, author, limit } = params.arguments
+        const { query, category, documentTags, author, limit } =
+          params.arguments
 
         // Validate limit
         const searchLimit = Math.min(limit || 20, 100)
@@ -92,7 +93,7 @@ export async function mcpToolsCall(ctx: Context, next: () => Promise<void>) {
         const searchResult = await masterDataService.searchDocuments({
           query,
           category,
-          tags,
+          documentTags,
           author,
           limit: searchLimit,
         })
@@ -103,7 +104,7 @@ export async function mcpToolsCall(ctx: Context, next: () => Promise<void>) {
           title: doc.title,
           content: doc.content,
           category: doc.category,
-          tags: doc.tags,
+          documentTags: doc.documentTags,
           author: doc.author,
           summary: doc.summary,
         }))
@@ -120,7 +121,7 @@ export async function mcpToolsCall(ctx: Context, next: () => Promise<void>) {
                   query: {
                     query,
                     category,
-                    tags,
+                    documentTags,
                     author,
                     limit: searchLimit,
                   },

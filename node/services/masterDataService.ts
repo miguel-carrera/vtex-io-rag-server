@@ -56,8 +56,10 @@ export class MasterDataService {
     }
 
     // Apply allowed tags filter
-    if (allowedTags && allowedTags.length > 0 && params.tags) {
-      params.tags = params.tags.filter((tag) => allowedTags.includes(tag))
+    if (allowedTags && allowedTags.length > 0 && params.documentTags) {
+      params.documentTags = params.documentTags.filter((tag) =>
+        allowedTags.includes(tag)
+      )
     }
 
     return params
@@ -84,7 +86,7 @@ export class MasterDataService {
           'title',
           'content',
           'category',
-          'tags',
+          'documentTags',
           'author',
           'enabled',
           'summary',
@@ -102,7 +104,7 @@ export class MasterDataService {
         title: doc.title,
         content: doc.content,
         category: doc.category,
-        tags: doc.tags || [],
+        documentTags: doc.documentTags || [],
         author: doc.author,
         enabled: Boolean(doc.enabled),
         summary: doc.summary,
@@ -138,7 +140,7 @@ export class MasterDataService {
           'title',
           'content',
           'category',
-          'tags',
+          'documentTags',
           'author',
           'enabled',
           'summary',
@@ -155,7 +157,7 @@ export class MasterDataService {
         title: doc.title,
         content: doc.content,
         category: doc.category,
-        tags: doc.tags || [],
+        documentTags: doc.documentTags || [],
         author: doc.author,
         enabled: Boolean(doc.enabled),
         summary: doc.summary,
@@ -189,7 +191,7 @@ export class MasterDataService {
           'title',
           'content',
           'category',
-          'tags',
+          'documentTags',
           'author',
           'enabled',
           'summary',
@@ -207,7 +209,7 @@ export class MasterDataService {
         title: doc.title,
         content: doc.content,
         category: doc.category,
-        tags: doc.tags || [],
+        documentTags: doc.documentTags || [],
         author: doc.author,
         enabled: Boolean(doc.enabled),
         summary: doc.summary,
@@ -280,7 +282,7 @@ export class MasterDataService {
       })
 
       const allTags = (response as any[])
-        .flatMap((doc) => doc.tags || [])
+        .flatMap((doc) => doc.documentTags || [])
         .filter(Boolean)
 
       const uniqueTags = Array.from(new Set(allTags)).sort()

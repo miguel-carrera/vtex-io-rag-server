@@ -54,7 +54,7 @@ The RAG (Retrieval-Augmented Generation) server implements the MCP protocol to e
   "title": "string (max 200 chars)",
   "content": "string (max 50000 chars)",
   "category": "string (max 100 chars)",
-  "tags": ["string array (max 20 items)"],
+  "documentTags": ["string array (max 20 items)"],
   "author": "string (max 100 chars)",
   "enabled": "boolean",
   "summary": "string (max 500 chars)"
@@ -160,7 +160,7 @@ curl -X POST \
     "title": "Product Pricing Guide",
     "content": "This document explains our pricing strategy...",
     "category": "Business",
-    "tags": ["pricing", "products", "strategy"],
+    "documentTags": ["pricing", "products", "strategy"],
     "author": "Business Team",
     "enabled": true,
     "summary": "Comprehensive guide to product pricing"
@@ -267,7 +267,7 @@ All operations are logged to MasterData for monitoring and debugging:
     "arguments": {
       "query": "API integration",
       "category": "Technical",
-      "tags": ["api", "integration"],
+      "documentTags": ["api", "integration"],
       "limit": 5
     }
   }

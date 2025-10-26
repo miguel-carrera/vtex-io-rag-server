@@ -4,7 +4,7 @@ export interface DocumentData {
   title: string
   content: string
   category: string
-  tags?: string[]
+  documentTags?: string[]
   author?: string
   enabled: boolean
   summary?: string
@@ -17,7 +17,7 @@ export interface DocumentDocument extends DocumentData {
 export interface DocumentSearchParams {
   query?: string
   category?: string
-  tags?: string[]
+  documentTags?: string[]
   author?: string
   limit?: number
   offset?: number

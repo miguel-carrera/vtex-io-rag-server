@@ -1,6 +1,11 @@
 import { json } from 'co-body'
 
-import type { MCPRequest, MCPResponse, MCPToolsListResponse, MCPTool } from '../types/mcp-protocol'
+import type {
+  MCPRequest,
+  MCPResponse,
+  MCPToolsListResponse,
+  MCPTool,
+} from '../types/mcp-protocol'
 import type { RAGConfig } from '../types/rag-config'
 import { logToMasterData } from '../utils/logging'
 import { getValidMethodsForEndpoint } from '../utils/mcpUtils'
@@ -95,13 +100,14 @@ export async function mcpToolsList(ctx: Context, next: () => Promise<void>) {
     if (searchSettings?.enableCategoryFilter !== false) {
       searchToolProperties.category = {
         type: 'string',
-        description: 'Filter documents by category (e.g., Product, Business, Technical, FAQ)',
+        description:
+          'Filter documents by category (e.g., Product, Business, Technical, FAQ)',
       }
     }
 
-    // Add tags property if tag filtering is enabled
+    // Add documentTags property if tag filtering is enabled
     if (searchSettings?.enableTagFilter !== false) {
-      searchToolProperties.tags = {
+      searchToolProperties.documentTags = {
         type: 'array',
         items: {
           type: 'string',
@@ -129,7 +135,8 @@ export async function mcpToolsList(ctx: Context, next: () => Promise<void>) {
 
     const searchTool: MCPTool = {
       name: 'search_documents',
-      description: 'Search for documents in the knowledge base using text matching',
+      description:
+        'Search for documents in the knowledge base using text matching',
       inputSchema: {
         type: 'object',
         properties: searchToolProperties,
@@ -156,7 +163,7 @@ export async function mcpToolsList(ctx: Context, next: () => Promise<void>) {
     await logToMasterData(ctx, 'mcpToolsList', 'middleware', 'info', {
       data: {
         toolsCount: tools.length,
-        tools: tools.map(t => t.name),
+        tools: tools.map((t) => t.name),
       },
       message: 'MCP tools list retrieved successfully',
     })
