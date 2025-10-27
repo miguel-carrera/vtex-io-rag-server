@@ -87,10 +87,27 @@ export async function mcpResourcesRead(
     const uri = params.uri
     const uriParts = uri.split('/')
 
-    if (uri.startsWith('rag://documents/')) {
-      if (uriParts.length === 3 && uriParts[2] === 'category') {
+    // Debug logging
+    await logToMasterData(
+      ctx,
+      'mcpResourcesRead-debug',
+      'middleware',
+      'debug',
+      {
+        data: {
+          uri,
+          uriParts,
+          uriPartsLength: uriParts.length,
+          startsWithDocuments: uri.startsWith('rag://documents'),
+        },
+        message: 'URI parsing debug info',
+      }
+    )
+
+    if (uri.startsWith('rag://documents')) {
+      if (uriParts.length === 5 && uriParts[2] === 'category') {
         // rag://documents/category/{category}
-        const category = decodeURIComponent(uriParts[3])
+        const category = decodeURIComponent(uriParts[4])
         const searchResult = await masterDataService.searchDocuments({
           category,
           limit: 50,
@@ -114,9 +131,9 @@ export async function mcpResourcesRead(
             },
           ],
         }
-      } else if (uriParts.length === 3 && uriParts[2] === 'tag') {
+      } else if (uriParts.length === 5 && uriParts[2] === 'tag') {
         // rag://documents/tag/{tag}
-        const tag = decodeURIComponent(uriParts[3])
+        const tag = decodeURIComponent(uriParts[4])
         const searchResult = await masterDataService.searchDocuments({
           documentTags: [tag],
           limit: 50,
@@ -140,8 +157,60 @@ export async function mcpResourcesRead(
             },
           ],
         }
-      } else if (uriParts.length === 2) {
+      } else if (uriParts.length === 4) {
+        // rag://documents/{id} - individual document by ID
+        const documentId = uriParts[3]
+        await logToMasterData(
+          ctx,
+          'mcpResourcesRead-debug',
+          'middleware',
+          'debug',
+          {
+            data: {
+              uri,
+              uriParts,
+              documentId,
+              branch: 'rag://documents by ID',
+            },
+            message: 'Taking rag://documents by ID branch',
+          }
+        )
+        const document = await masterDataService.getDocumentById(documentId)
+
+        if (!document) {
+          ctx.status = 404
+          ctx.body = {
+            jsonrpc: '2.0',
+            id: requestBody.id,
+            error: {
+              code: -32601,
+              message: 'Document not found',
+            },
+          }
+          return
+        }
+
+        response = {
+          contents: [
+            {
+              uri,
+              mimeType: 'application/json',
+              text: JSON.stringify(document, null, 2),
+            },
+          ],
+        }
+      } else if (uriParts.length === 3) {
         // rag://documents
+        await logToMasterData(
+          ctx,
+          'mcpResourcesRead-debug',
+          'middleware',
+          'debug',
+          {
+            data: { uri, uriParts, branch: 'rag://documents base case' },
+            message: 'Taking rag://documents base case branch',
+          }
+        )
         const searchResult = await masterDataService.listDocuments(1, 50)
 
         response = {
@@ -162,6 +231,16 @@ export async function mcpResourcesRead(
           ],
         }
       } else {
+        await logToMasterData(
+          ctx,
+          'mcpResourcesRead-debug',
+          'middleware',
+          'debug',
+          {
+            data: { uri, uriParts, branch: 'rag://documents else case' },
+            message: 'Taking rag://documents else case - Resource not found',
+          }
+        )
         ctx.status = 404
         ctx.body = {
           jsonrpc: '2.0',
