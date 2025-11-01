@@ -3,16 +3,24 @@ import type { MCPError } from '../types/mcp-protocol'
 /**
  * Map HTTP errors to MCP error codes
  */
-export function mapHttpErrorToMCP(error: any): MCPError {
+export function mapHttpErrorToMCP(error: unknown): MCPError {
   // Default to internal server error
   let code = -32603
   let message = 'Internal error'
-  let data: any = undefined
+  let data: any
 
   if (error && typeof error === 'object') {
+    // Type guard for error object with status/statusCode
+    const errorObj = error as {
+      status?: number
+      statusCode?: number
+      message?: string
+      details?: unknown
+    }
+
     // Handle HTTP status codes
-    if (error.status || error.statusCode) {
-      const status = error.status || error.statusCode
+    if (errorObj.status || errorObj.statusCode) {
+      const status = errorObj.status || errorObj.statusCode
       data = { httpStatusCode: status }
 
       switch (status) {
@@ -52,15 +60,15 @@ export function mapHttpErrorToMCP(error: any): MCPError {
           break
         default:
           code = -32603
-          message = error.message || 'Internal error'
+          message = errorObj.message || 'Internal error'
       }
-    } else if (error.message) {
-      message = error.message
+    } else if (errorObj.message) {
+      message = errorObj.message
     }
 
     // Add additional error details if available
-    if (error.details) {
-      data = { ...data, details: error.details }
+    if (errorObj.details) {
+      data = { ...data, details: errorObj.details }
     }
   }
 

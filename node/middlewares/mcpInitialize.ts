@@ -1,6 +1,10 @@
 import { json } from 'co-body'
 
-import type { MCPRequest, MCPResponse, MCPInitializeResponse } from '../types/mcp-protocol'
+import type {
+  MCPRequest,
+  MCPResponse,
+  MCPInitializeResponse,
+} from '../types/mcp-protocol'
 import { logToMasterData } from '../utils/logging'
 
 /**

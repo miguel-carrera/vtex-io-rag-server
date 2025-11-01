@@ -1,6 +1,10 @@
 import { json } from 'co-body'
 
-import type { MCPRequest, MCPResponse, MCPHandshakeResponse } from '../types/mcp-protocol'
+import type {
+  MCPRequest,
+  MCPResponse,
+  MCPHandshakeResponse,
+} from '../types/mcp-protocol'
 import { logToMasterData } from '../utils/logging'
 
 /**
@@ -56,7 +60,8 @@ export async function mcpHandshake(ctx: Context, next: () => Promise<void>) {
       serverInfo: {
         name: 'VTEX IO RAG Server',
         version: '1.0.0',
-        description: 'Model Context Protocol server for document search and retrieval',
+        description:
+          'Model Context Protocol server for document search and retrieval',
       },
     }
 

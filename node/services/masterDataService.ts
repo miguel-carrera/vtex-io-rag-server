@@ -17,7 +17,8 @@ export class MasterDataService {
    * Get RAG configuration for the current instance
    */
   private getRAGConfig(): RAGConfig | undefined {
-    return (this.ctx.state as any)?.body?.ragConfig
+    return (this.ctx.state as { body?: { ragConfig?: RAGConfig } })?.body
+      ?.ragConfig
   }
 
   /**
@@ -100,16 +101,18 @@ export class MasterDataService {
         schema: this.schema,
       })
 
-      const documents: DocumentDocument[] = (response as any[]).map((doc) => ({
-        id: doc.id,
-        title: doc.title,
-        content: doc.content,
-        url: doc.url,
-        category: doc.category,
-        documentTags: doc.documentTags || [],
-        author: doc.author,
+      const documents: DocumentDocument[] = (
+        response as Array<Record<string, unknown>>
+      ).map((doc) => ({
+        id: doc.id as string,
+        title: doc.title as string,
+        content: doc.content as string | undefined,
+        url: doc.url as string | undefined,
+        category: doc.category as string,
+        documentTags: (doc.documentTags as string[]) || [],
+        author: doc.author as string | undefined,
         enabled: Boolean(doc.enabled),
-        summary: doc.summary,
+        summary: doc.summary as string | undefined,
       }))
 
       return {
@@ -154,17 +157,17 @@ export class MasterDataService {
         return null
       }
 
-      const doc = response as any
+      const doc = response as Record<string, unknown>
       const document: DocumentDocument = {
-        id: doc.id,
-        title: doc.title,
-        content: doc.content,
-        url: doc.url,
-        category: doc.category,
-        documentTags: doc.documentTags || [],
-        author: doc.author,
+        id: doc.id as string,
+        title: doc.title as string,
+        content: doc.content as string | undefined,
+        url: doc.url as string | undefined,
+        category: doc.category as string,
+        documentTags: (doc.documentTags as string[]) || [],
+        author: doc.author as string | undefined,
         enabled: Boolean(doc.enabled),
-        summary: doc.summary,
+        summary: doc.summary as string | undefined,
       }
 
       return document
@@ -184,8 +187,8 @@ export class MasterDataService {
    * List all documents with pagination
    */
   public async listDocuments(
-    page: number = 1,
-    pageSize: number = 20
+    page = 1,
+    pageSize = 20
   ): Promise<DocumentSearchResult> {
     try {
       const response = await this.ctx.clients.masterdata.searchDocuments({
@@ -209,16 +212,18 @@ export class MasterDataService {
         schema: this.schema,
       })
 
-      const documents: DocumentDocument[] = (response as any[]).map((doc) => ({
-        id: doc.id,
-        title: doc.title,
-        content: doc.content,
-        url: doc.url,
-        category: doc.category,
-        documentTags: doc.documentTags || [],
-        author: doc.author,
+      const documents: DocumentDocument[] = (
+        response as Array<Record<string, unknown>>
+      ).map((doc) => ({
+        id: doc.id as string,
+        title: doc.title as string,
+        content: doc.content as string | undefined,
+        url: doc.url as string | undefined,
+        category: doc.category as string,
+        documentTags: (doc.documentTags as string[]) || [],
+        author: doc.author as string | undefined,
         enabled: Boolean(doc.enabled),
-        summary: doc.summary,
+        summary: doc.summary as string | undefined,
       }))
 
       return {
@@ -255,8 +260,12 @@ export class MasterDataService {
       })
 
       const categories = Array.from(
-        new Set((response as any[]).map((doc) => doc.category).filter(Boolean))
-      ).sort()
+        new Set(
+          (response as Array<Record<string, unknown>>)
+            .map((doc) => doc.category as string)
+            .filter(Boolean)
+        )
+      ).sort((a, b) => a.localeCompare(b))
 
       return categories
     } catch (error) {
@@ -287,11 +296,13 @@ export class MasterDataService {
         schema: this.schema,
       })
 
-      const allTags = (response as any[])
-        .flatMap((doc) => doc.documentTags || [])
+      const allTags = (response as Array<Record<string, unknown>>)
+        .flatMap((doc) => (doc.documentTags as string[]) || [])
         .filter(Boolean)
 
-      const uniqueTags = Array.from(new Set(allTags)).sort()
+      const uniqueTags = Array.from(new Set(allTags)).sort((a, b) =>
+        a.localeCompare(b)
+      )
 
       return uniqueTags
     } catch (error) {

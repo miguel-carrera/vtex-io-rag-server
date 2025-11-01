@@ -440,7 +440,8 @@ async function handleHandshake(ctx: Context, requestBody: MCPRequest) {
       serverInfo: {
         name: 'VTEX IO RAG Server',
         version: '1.0.0',
-        description: 'Model Context Protocol server for document search and retrieval',
+        description:
+          'Model Context Protocol server for document search and retrieval',
       },
     }
 

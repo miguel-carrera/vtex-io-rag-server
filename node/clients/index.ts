@@ -1,4 +1,5 @@
 import { IOClients, MasterData, Sphinx } from '@vtex/api'
+
 import { VtexId } from './vtexId'
 
 // Extend the default IOClients implementation with our own custom clients.

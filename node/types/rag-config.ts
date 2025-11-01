@@ -34,7 +34,6 @@ export interface SearchSettings {
   enableAuthorFilter?: boolean
 }
 
-
 /**
  * RAG Configuration response from MasterData
  */
