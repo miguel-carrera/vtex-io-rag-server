@@ -198,7 +198,7 @@ Executes a tool (currently only `search_documents`).
     "content": [
       {
         "type": "text",
-        "text": "{\n  \"results\": [\n    {\n      \"id\": \"doc123\",\n      \"title\": \"Product Pricing Strategy\",\n      \"content\": \"Our pricing strategy is based on...\",\n      \"category\": \"Business\",\n      \"tags\": [\"pricing\", \"strategy\"],\n      \"author\": \"Business Team\",\n      \"createdDate\": \"2024-01-15T10:00:00Z\",\n      \"updatedDate\": \"2024-01-20T14:30:00Z\",\n      \"summary\": \"Comprehensive pricing strategy guide\"\n    }\n  ],\n  \"total\": 1,\n  \"hasMore\": false,\n  \"query\": {\n    \"query\": \"product pricing\",\n    \"category\": \"Business\",\n    \"tags\": [\"pricing\", \"strategy\"],\n    \"limit\": 10\n  }\n}"
+        "text": "{\n  \"results\": [\n    {\n      \"id\": \"doc123\",\n      \"title\": \"Product Pricing Strategy\",\n      \"content\": \"Our pricing strategy is based on...\",\n      \"url\": null,\n      \"category\": \"Business\",\n      \"documentTags\": [\"pricing\", \"strategy\"],\n      \"author\": \"Business Team\",\n      \"summary\": \"Comprehensive pricing strategy guide\"\n    },\n    {\n      \"id\": \"doc456\",\n      \"title\": \"External API Documentation\",\n      \"content\": null,\n      \"url\": \"https://docs.example.com/api-guide\",\n      \"category\": \"Technical\",\n      \"documentTags\": [\"api\", \"external\"],\n      \"author\": \"Technical Team\",\n      \"summary\": \"External API documentation reference\"\n    }\n  ],\n  \"total\": 2,\n  \"hasMore\": false,\n  \"query\": {\n    \"query\": \"product pricing\",\n    \"category\": \"Business\",\n    \"documentTags\": [\"pricing\", \"strategy\"],\n    \"limit\": 10\n  }\n}"
       }
     ]
   }
@@ -294,7 +294,7 @@ Reads a specific resource.
       {
         "uri": "rag://documents/category/Product",
         "mimeType": "application/json",
-        "text": "{\n  \"category\": \"Product\",\n  \"documents\": [\n    {\n      \"id\": \"doc123\",\n      \"title\": \"Product Catalog Guide\",\n      \"content\": \"This guide covers our product catalog...\",\n      \"category\": \"Product\",\n      \"tags\": [\"catalog\", \"products\"],\n      \"author\": \"Product Team\",\n      \"createdDate\": \"2024-01-10T09:00:00Z\",\n      \"updatedDate\": \"2024-01-15T16:45:00Z\",\n      \"summary\": \"Complete product catalog documentation\"\n    }\n  ],\n  \"total\": 1,\n  \"hasMore\": false\n}"
+        "text": "{\n  \"category\": \"Product\",\n  \"documents\": [\n    {\n      \"id\": \"doc123\",\n      \"title\": \"Product Catalog Guide\",\n      \"content\": \"This guide covers our product catalog...\",\n      \"url\": null,\n      \"category\": \"Product\",\n      \"documentTags\": [\"catalog\", \"products\"],\n      \"author\": \"Product Team\",\n      \"summary\": \"Complete product catalog documentation\"\n    }\n  ],\n  \"total\": 1,\n  \"hasMore\": false\n}"
       }
     ]
   }

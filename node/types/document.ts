@@ -2,7 +2,8 @@
 
 export interface DocumentData {
   title: string
-  content: string
+  content?: string
+  url?: string
   category: string
   documentTags?: string[]
   author?: string

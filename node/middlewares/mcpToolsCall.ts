@@ -103,6 +103,7 @@ export async function mcpToolsCall(ctx: Context, next: () => Promise<void>) {
           id: doc.id,
           title: doc.title,
           content: doc.content,
+          url: doc.url,
           category: doc.category,
           documentTags: doc.documentTags,
           author: doc.author,

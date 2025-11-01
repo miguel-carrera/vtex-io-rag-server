@@ -7,3 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Added `url` field to RAG documents schema to support external content references
+- Documents can now store content directly or reference a URL from where to fetch the content
+- Made `content` field optional to allow documents with only URL references
+
+### New
+
+- Initial implementation

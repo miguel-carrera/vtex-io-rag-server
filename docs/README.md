@@ -11,7 +11,8 @@ The RAG (Retrieval-Augmented Generation) server implements the MCP protocol to e
 ### Storage Layer
 
 - **MasterData v2**: Documents are stored in the `vtex_rag_documents` data entity
-- **Schema**: Each document has title, content, category, tags, author, and metadata
+- **Schema**: Each document has title, content (optional), url (optional), category, tags, author, and metadata
+- **Content Support**: Documents can store content directly or reference a URL from where to fetch the content
 - **Indexing**: Full-text search capabilities on title, content, and tags
 - **Configuration**: Instance-specific settings stored in `vtex_rag_configs` data entity
 
@@ -51,15 +52,18 @@ The RAG (Retrieval-Augmented Generation) server implements the MCP protocol to e
 
 ```json
 {
-  "title": "string (max 200 chars)",
-  "content": "string (max 50000 chars)",
-  "category": "string (max 100 chars)",
-  "documentTags": ["string array (max 20 items)"],
-  "author": "string (max 100 chars)",
-  "enabled": "boolean",
-  "summary": "string (max 500 chars)"
+  "title": "string (max 200 chars, required)",
+  "content": "string (max 50000 chars, optional)",
+  "url": "string (max 2000 chars, optional)",
+  "category": "string (max 100 chars, required)",
+  "documentTags": ["string array (max 20 items, optional)"],
+  "author": "string (max 100 chars, optional)",
+  "enabled": "boolean (required)",
+  "summary": "string (max 500 chars, optional)"
 }
 ```
+
+**Note**: Documents must have either `content` or `url` (or both). The `content` field stores the document text directly, while the `url` field references an external location from where to fetch the content.
 
 ### RAG Configuration Schema
 
@@ -150,7 +154,7 @@ The RAG (Retrieval-Augmented Generation) server implements the MCP protocol to e
 Documents are managed directly in MasterData v2 through the VTEX admin interface or API:
 
 ```bash
-# Example: Add a document via MasterData API
+# Example 1: Add a document with content directly
 curl -X POST \
   "https://{{account}}.vtexcommercestable.com.br/api/dataentities/vtex_rag_documents/documents" \
   -H "Content-Type: application/json" \
@@ -164,6 +168,22 @@ curl -X POST \
     "author": "Business Team",
     "enabled": true,
     "summary": "Comprehensive guide to product pricing"
+  }'
+
+# Example 2: Add a document with URL reference
+curl -X POST \
+  "https://{{account}}.vtexcommercestable.com.br/api/dataentities/vtex_rag_documents/documents" \
+  -H "Content-Type: application/json" \
+  -H "X-VTEX-API-AppKey: {{appKey}}" \
+  -H "X-VTEX-API-AppToken: {{appToken}}" \
+  -d '{
+    "title": "External Documentation",
+    "url": "https://docs.example.com/api-guide",
+    "category": "Technical",
+    "documentTags": ["api", "external"],
+    "author": "Technical Team",
+    "enabled": true,
+    "summary": "External API documentation reference"
   }'
 ```
 
